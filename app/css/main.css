@@ -1,0 +1,35 @@
+body {
+  padding: 10px;
+  font-size: 1em;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.loader, .error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
+  text-align: center;
+  background-color: white;
+}
+
+.loader div, .error div {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.collection {
+  min-width: 300px;
+}
+
+.collection a {
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}

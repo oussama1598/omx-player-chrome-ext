@@ -1,0 +1,8 @@
+{
+  "name": "omx-player-chrome-ext",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "materialize": "^0.100.2"
+  }
+}
