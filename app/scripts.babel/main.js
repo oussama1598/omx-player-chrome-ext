@@ -12,30 +12,27 @@ const request = (method, url, data = {}) =>
   new Promise((resolve, reject) => {
     $[method](url, data)
       .done(resolve)
-      .fail(reject)
+      .fail(err => {
+        if (err.status !== 400) {
+          return reject(`${url}: ${err.statusText}`)
+        }
+
+        return reject(err.responseJSON.errors[0])
+      })
   })
 
 const getStreams = url =>
   getData()
-  .then(data => request('get', `${data.localHost}/api/youtube`, {
+  .then(data => request('get', `${data.KodiUrl}/api/youtube`, {
     url
   }))
-  .catch(err => Promise.reject(err.responseJSON.errors[0]))
+  .then(data => JSON.parse(data))
 
-const addStream = streamURI =>
+const streamToKodi = streamURI =>
   getData()
-  .then(data => request('post', `${data.localHost}/api/stream`, {
-    input: 'internet',
-    streamURI
+  .then(data => request('post', `${data.KodiUrl}/api/controls/play`, {
+    source: streamURI
   }))
-  .catch(err => Promise.reject(err.responseJSON.errors[0]))
-
-const streamToPi = source =>
-  getData()
-  .then(data => request('get', `${data.raspiHost}/controls/play`, {
-    source
-  }))
-  .catch(err => Promise.reject(err.responseJSON.errors[0]))
 
 const buildHTML = format =>
   `<a class="collection-item" data-url="${format.url}">
@@ -53,6 +50,22 @@ const showError = err => {
   error.removeClass('hide').find('div').text(err)
 }
 
+const showLoading = () => {
+  const loader = $('.loader')
+  const collection = $('.collection')
+  const error = $('.error')
+
+  error.addClass('hide')
+  collection.addClass('hide')
+
+  loader.removeClass('hide')
+}
+
+const timeoutPromise = timeout =>
+  new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
+
 $(document).ready(() => {
   const loader = $('.loader')
   const collection = $('.collection')
@@ -61,8 +74,10 @@ $(document).ready(() => {
   collection.on('click', '.collection-item', function() {
     const url = $(this).attr('data-url')
 
-    addStream(url)
-      .then(result => streamToPi(result.streamUrl))
+    showLoading()
+    streamToKodi(url)
+      .then(() => showError('Stream casted, check your player'))
+      .then(() => timeoutPromise(2000))
       .then(() => window.close())
       .catch(err => showError(err))
   })

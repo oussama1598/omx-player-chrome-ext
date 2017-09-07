@@ -1,10 +1,10 @@
 {
   "appName": {
-    "message": "omx player chrome ext",
+    "message": "YTKodi",
     "description": "The name of the application"
   },
   "appDescription": {
-    "message": "My Chrome Extension",
+    "message": "Stream youtube video/audio to kodi",
     "description": "The description of the application"
   }
 }

@@ -1,6 +1,5 @@
 const getData = (properties = {
-    localHost: 'http://localhost:9000',
-    raspiHost: 'http://raspberrypi.local:8082'
+    KodiUrl: 'http://oussama.local:8080'
   }) =>
   new Promise(resolve => {
     chrome.storage.sync.get(properties, resolve);

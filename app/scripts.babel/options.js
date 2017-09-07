@@ -18,27 +18,22 @@ const ValidURL = str =>
 
 
 $(document).ready(() => {
-  const localHostInput = $('#localHost')
-  const raspiHostInput = $('#raspiHost')
+  const KodiUrl = $('#KodiURL')
 
   getData()
     .then(data => {
-      localHostInput.val(data.localHost)
-      raspiHostInput.val(data.raspiHost)
+      KodiUrl.val(data.KodiUrl)
     })
 
   $('#form').submit(ev => {
-    const localHost = localHostInput.val()
-    const raspiHost = raspiHostInput.val()
+    const KodiUrlVal = KodiUrl.val()
 
     ev.preventDefault()
 
-    if (!ValidURL(localHost)) return showError('localHost should be a valid url')
-    if (!ValidURL(raspiHost)) return showError('raspiHost should be a valid url')
+    if (!ValidURL(KodiUrlVal)) return showError('Kodi\'s Url should be a valid url')
 
     setData({
-        localHost,
-        raspiHost
+        KodiUrl: KodiUrlVal
       })
       .then(() => showSuccess('Settings Saved!'))
   })
